@@ -1,0 +1,32 @@
+.dashboard {
+  padding: 24px;
+
+  h2 {
+    margin-bottom: 24px;
+  }
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+
+  .amount {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin: 8px 0;
+
+    &.income {
+      color: #2e7d32;
+    }
+
+    &.expense {
+      color: #c62828;
+    }
+  }
+}
+
+.budget-section {
+  margin-top: 16px;
+}

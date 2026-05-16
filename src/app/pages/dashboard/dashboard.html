@@ -1,0 +1,76 @@
+<div class="dashboard">
+  <h2>Bienvenido{{ user?.firstname ? ', ' + user?.firstname : '' }}</h2>
+
+  <div class="summary-cards">
+    <mat-card>
+      <mat-card-header>
+        <mat-icon mat-card-avatar>arrow_upward</mat-icon>
+        <mat-card-title>Ingresos</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="amount income">{{ totalIncome | number:'1.2-2' }}</p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <mat-icon mat-card-avatar>arrow_downward</mat-icon>
+        <mat-card-title>Gastos</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="amount expense">{{ totalExpense | number:'1.2-2' }}</p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <mat-icon mat-card-avatar>account_balance</mat-icon>
+        <mat-card-title>Balance</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="amount balance">{{ balance | number:'1.2-2' }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  @if (loading) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  @if (summaries.length > 0) {
+    <mat-card class="budget-section">
+      <mat-card-header>
+        <mat-card-title>Presupuestos</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          @for (item of summaries; track item.category_id) {
+            <mat-list-item>
+              <span matListItemTitle>{{ item.category_name }}</span>
+              <span matListItemLine>
+                {{
+                  item.usage_percentage != null
+                    ? (item.total_expense | number:'1.2-2') + ' / ' + (item.budget | number:'1.2-2')
+                    : 'Sin presupuesto definido'
+                }}
+              </span>
+              <span matListItemMeta>
+                {{
+                  item.usage_percentage != null
+                    ? (item.usage_percentage | number:'1.0-0') + '%'
+                    : ''
+                }}
+              </span>
+              @if (item.usage_percentage != null) {
+                <mat-progress-bar
+                  matListItemLine
+                  mode="determinate"
+                  [value]="item.usage_percentage"
+                  [color]="item.usage_percentage > 80 ? 'warn' : 'primary'"
+                />
+              }
+            </mat-list-item>
+          }
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

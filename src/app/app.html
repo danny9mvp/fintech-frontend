@@ -1,0 +1,26 @@
+<mat-toolbar color="primary">
+  <span>Fintech</span>
+  <span class="spacer"></span>
+  @if (isLoggedIn) {
+    <a mat-button routerLink="/dashboard" routerLinkActive="active-link">
+      <mat-icon>dashboard</mat-icon>
+      Dashboard
+    </a>
+    <a mat-button routerLink="/categories" routerLinkActive="active-link">
+      <mat-icon>category</mat-icon>
+      Categorias
+    </a>
+    <a mat-button routerLink="/movements" routerLinkActive="active-link">
+      <mat-icon>receipt</mat-icon>
+      Movimientos
+    </a>
+    <button mat-button (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Salir
+    </button>
+  }
+</mat-toolbar>
+
+<div class="content">
+  <router-outlet />
+</div>

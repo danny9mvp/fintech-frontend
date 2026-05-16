@@ -1,0 +1,105 @@
+<div class="page-header">
+  <h2>Movimientos</h2>
+  <button mat-raised-button color="primary" (click)="create()">
+    <mat-icon>add</mat-icon>
+    Nuevo movimiento
+  </button>
+</div>
+
+<div class="filters">
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Tipo</mat-label>
+    <mat-select [(ngModel)]="filters.movement_type">
+      <mat-option value="">Todos</mat-option>
+      <mat-option value="INCOME">Ingreso</mat-option>
+      <mat-option value="EXPENSE">Gasto</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Categoria</mat-label>
+    <mat-select [(ngModel)]="filters.category_id">
+      <mat-option [value]="undefined">Todas</mat-option>
+      @for (c of categories; track c.id) {
+        <mat-option [value]="c.id">{{ c.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Desde</mat-label>
+    <input matInput type="date" [(ngModel)]="filters.date_from" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Hasta</mat-label>
+    <input matInput type="date" [(ngModel)]="filters.date_to" />
+  </mat-form-field>
+
+  <button mat-stroked-button (click)="load()">
+    <mat-icon>search</mat-icon>
+    Filtrar
+  </button>
+  <button mat-button (click)="clearFilters()">Limpiar</button>
+</div>
+
+@if (loading) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+@if (!loading && movements.length === 0) {
+  <p class="empty">No hay movimientos registrados.</p>
+}
+
+@if (!loading && movements.length > 0) {
+  <table mat-table [dataSource]="movements">
+    <ng-container matColumnDef="created_at">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let m">{{ m.created_at | date:'dd/MM/yyyy' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Descripcion</th>
+      <td mat-cell *matCellDef="let m">{{ m.description || '—' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="category_name">
+      <th mat-header-cell *matHeaderCellDef>Categoria</th>
+      <td mat-cell *matCellDef="let m">{{ m.category_name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Tipo</th>
+      <td mat-cell *matCellDef="let m">
+        <span [class.income]="m.type === 'INCOME'" [class.expense]="m.type === 'EXPENSE'">
+          {{ m.type === 'INCOME' ? 'Ingreso' : 'Gasto' }}
+        </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Monto</th>
+      <td mat-cell *matCellDef="let m" [class.income]="m.type === 'INCOME'" [class.expense]="m.type === 'EXPENSE'">
+        {{ m.amount | number:'1.2-2' }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let m">
+        <button mat-icon-button (click)="edit(m.id)" matTooltip="Editar">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="delete(m.id)" matTooltip="Eliminar">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+  </table>
+
+  <mat-paginator
+    [length]="total"
+    [pageSize]="filters.page_size!"
+    [pageIndex]="(filters.page ?? 1) - 1"
+    [pageSizeOptions]="[5, 10, 20, 50]"
+    (page)="onPage($event)"
+  />
+}

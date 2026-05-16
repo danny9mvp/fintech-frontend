@@ -1,0 +1,94 @@
+<div class="register-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Crear Cuenta</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form #form="ngForm" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Correo electronico</mat-label>
+          <input
+            matInput
+            type="email"
+            name="email"
+            [(ngModel)]="data.email"
+            required
+            email
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre de usuario</mat-label>
+          <input
+            matInput
+            name="username"
+            [(ngModel)]="data.username"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Primer nombre</mat-label>
+          <input
+            matInput
+            name="firstname"
+            [(ngModel)]="data.firstname"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Segundo nombre</mat-label>
+          <input
+            matInput
+            name="middlename"
+            [(ngModel)]="data.middlename"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Apellido</mat-label>
+          <input
+            matInput
+            name="lastname"
+            [(ngModel)]="data.lastname"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Segundo apellido</mat-label>
+          <input
+            matInput
+            name="second_lastname"
+            [(ngModel)]="data.second_lastname"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Contrasena</mat-label>
+          <input
+            matInput
+            type="password"
+            name="password"
+            [(ngModel)]="data.password"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Confirmar contrasena</mat-label>
+          <input
+            matInput
+            type="password"
+            name="confirmPassword"
+            [(ngModel)]="confirmPassword"
+            required
+          />
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="loading || form.invalid"
+        >
+          {{ loading ? 'Registrando...' : 'Registrarse' }}
+        </button>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-button routerLink="/login">Ya tengo una cuenta</a>
+    </mat-card-actions>
+  </mat-card>
+</div>

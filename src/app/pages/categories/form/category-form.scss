@@ -1,0 +1,23 @@
+.form-container {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+
+  mat-card {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 16px;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
