@@ -1,10 +1,74 @@
-html,
-body {
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+:root {
+  --smart-blue: #0466c8;
+  --sapphire: #0353a4;
+  --regal-navy: #023e7d;
+  --prussian-blue: #002855;
+  --prussian-blue-2: #001845;
+  --prussian-blue-3: #001233;
+  --twilight-indigo: #33415c;
+  --blue-slate: #5c677d;
+  --slate-grey: #7d8597;
+  --lavender-grey: #979dac;
+
+  --bg-page: #f4f5f7;
+  --bg-card: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: var(--slate-grey);
+  --income: #2e7d32;
+  --expense: #c62828;
+  --border: #e0e0e0;
+}
+
+html, body {
   height: 100%;
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
 }
 
 * {
   box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--lavender-grey);
+  border-radius: 4px;
+}
+
+.mat-mdc-select-panel {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
+  padding: 4px 0 !important;
+
+  .mat-mdc-option {
+    min-height: 44px;
+    font-size: 0.9rem;
+
+    &:hover {
+      background: rgba(4, 102, 200, 0.08);
+    }
+
+    &.mat-mdc-option-active {
+      background: rgba(4, 102, 200, 0.12);
+    }
+  }
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-outline {
+  color: var(--smart-blue) !important;
 }

@@ -15,6 +15,7 @@
 }
 
 @if (!loading && categories.length > 0) {
+  <div class="table-wrapper">
   <table mat-table [dataSource]="categories">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Nombre</th>
@@ -41,4 +42,5 @@
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
     <tr mat-row *matRowDef="let row; columns: columns"></tr>
   </table>
+  </div>
 }

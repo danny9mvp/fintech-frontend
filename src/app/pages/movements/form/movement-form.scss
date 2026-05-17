@@ -1,17 +1,25 @@
 .form-container {
   display: flex;
   justify-content: center;
-  padding: 24px;
+  padding: 32px;
 
   mat-card {
     width: 100%;
     max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+    mat-card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--prussian-blue-3);
+    }
   }
 
   form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
     padding-top: 16px;
   }
 }

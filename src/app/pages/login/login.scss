@@ -2,12 +2,36 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  padding: 16px;
+  min-height: calc(100dvh - 64px);
+  padding: 24px;
+  background: linear-gradient(135deg, var(--bg-page) 0%, #e8edf5 100%);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--smart-blue), var(--sapphire), var(--regal-navy));
+  }
 
   mat-card {
     width: 100%;
     max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+
+    mat-card-header {
+      padding-top: 24px;
+
+      mat-card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--prussian-blue);
+      }
+    }
   }
 
   form {
@@ -15,5 +39,16 @@
     flex-direction: column;
     gap: 16px;
     padding-top: 16px;
+  }
+
+  mat-card-actions {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+
+    a {
+      color: var(--smart-blue);
+      font-weight: 500;
+    }
   }
 }
