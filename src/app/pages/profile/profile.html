@@ -1,0 +1,104 @@
+<div class="profile-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Mi Perfil</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (user) {
+        <div class="info-section">
+          <div class="info-row">
+            <span class="info-label">Primer nombre</span>
+            <span class="info-value">{{ user.firstname }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Apellido</span>
+            <span class="info-value">{{ user.lastname }}</span>
+          </div>
+        </div>
+
+        <mat-divider />
+
+        <form #form="ngForm" (ngSubmit)="submit()" class="edit-section">
+          <mat-form-field appearance="outline">
+            <mat-label>Correo electronico</mat-label>
+            <input matInput type="email" name="email" [(ngModel)]="data.email" required email />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre de usuario</mat-label>
+            <input matInput name="username" [(ngModel)]="data.username" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Segundo nombre</mat-label>
+            <input matInput name="middlename" [(ngModel)]="data.middlename" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Segundo apellido</mat-label>
+            <input matInput name="second_lastname" [(ngModel)]="data.second_lastname" />
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="router.navigate(['/dashboard'])">
+              Cancelar
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="loading || form.invalid"
+            >
+              {{ loading ? 'Guardando...' : 'Guardar' }}
+            </button>
+          </div>
+        </form>
+
+        <mat-divider />
+
+        <div class="password-section">
+          <h3 class="section-title">Cambiar contrasena</h3>
+          <form #passwordForm="ngForm" (ngSubmit)="updatePassword()">
+            <mat-form-field appearance="outline">
+              <mat-label>Nueva contrasena</mat-label>
+              <input
+                matInput
+                type="password"
+                name="password"
+                [(ngModel)]="passwordData.password"
+                required
+                minlength="6"
+                #passwordInput="ngModel"
+              />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Repetir nueva contrasena</mat-label>
+              <input
+                matInput
+                type="password"
+                name="confirmPassword"
+                [(ngModel)]="confirmPassword"
+                required
+                #confirmInput="ngModel"
+              />
+            </mat-form-field>
+
+            <div class="form-actions">
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="passwordLoading || passwordForm.invalid || passwordData.password !== confirmPassword"
+              >
+                {{ passwordLoading ? 'Actualizando...' : 'Actualizar contrasena' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      } @else {
+        <mat-progress-bar mode="indeterminate" />
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

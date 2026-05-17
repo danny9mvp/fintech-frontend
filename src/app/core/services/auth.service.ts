@@ -8,6 +8,8 @@ import {
   RefreshRequest,
   LogoutRequest,
   UserResponse,
+  ProfileUpdate,
+  PasswordUpdate,
 } from '../models/user';
 import { Router } from '@angular/router';
 
@@ -54,6 +56,16 @@ export class AuthService {
         this.clearSession();
         return throwError(() => err);
       })
+    );
+  }
+
+  updatePassword(data: PasswordUpdate): Observable<UserResponse> {
+    return this.http.patch<UserResponse>('/users/me', data);
+  }
+
+  updateProfile(data: ProfileUpdate): Observable<UserResponse> {
+    return this.http.patch<UserResponse>('/users/me', data).pipe(
+      tap((user) => sessionStorage.setItem(this.USER_KEY, JSON.stringify(user)))
     );
   }
 
