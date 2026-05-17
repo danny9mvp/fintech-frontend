@@ -29,3 +29,21 @@
   justify-content: flex-end;
   gap: 8px;
 }
+
+.budget-warning {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  color: #856404;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.budget-critical {
+  background: #f8d7da;
+  border: 1px solid #dc3545;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
