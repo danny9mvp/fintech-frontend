@@ -36,3 +36,14 @@ export interface UserResponse {
   lastname: string | null;
   second_lastname: string | null;
 }
+
+export interface ProfileUpdate {
+  email: string;
+  username: string;
+  middlename?: string | null;
+  second_lastname?: string | null;
+}
+
+export interface PasswordUpdate {
+  password: string;
+}

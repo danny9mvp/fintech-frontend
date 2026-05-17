@@ -1,0 +1,74 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+
+  mat-card {
+    width: 100%;
+    max-width: 520px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+    mat-card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--prussian-blue);
+    }
+  }
+}
+
+.info-section {
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  .info-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .info-value {
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+}
+
+.edit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 20px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.password-section {
+  padding-top: 20px;
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--prussian-blue);
+    margin: 0 0 16px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
