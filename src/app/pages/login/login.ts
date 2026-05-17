@@ -29,11 +29,9 @@ export class Login {
   private snackBar = inject(MatSnackBar);
 
   data: LoginRequest = { email: '', password: '' };
-  loading = false;
 
   submit(): void {
     if (!this.data.email || !this.data.password) return;
-    this.loading = true;
     this.auth.login(this.data).subscribe({
       next: () => {
         this.auth.me().subscribe(() => {
@@ -41,7 +39,6 @@ export class Login {
         });
       },
       error: (err) => {
-        this.loading = false;
         const msg = err.error?.detail || 'Error al iniciar sesion';
         this.snackBar.open(msg, 'Cerrar', { duration: 4000 });
       },
