@@ -38,7 +38,7 @@ yarn-error.log
 testem.log
 /typings
 __screenshots__/
-.playwright/
+.playwright-mcp/
 
 # System files
 .DS_Store
