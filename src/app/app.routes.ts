@@ -20,6 +20,12 @@ export const routes: Routes = [
       import('./pages/dashboard/dashboard').then((c) => c.Dashboard),
   },
   {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/profile/profile').then((c) => c.Profile),
+  },
+  {
     path: 'categories',
     canActivate: [authGuard],
     loadComponent: () =>
