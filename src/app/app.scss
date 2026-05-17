@@ -1,12 +1,39 @@
-.spacer {
-  flex: 1 1 auto;
+mat-toolbar {
+  background: var(--prussian-blue-3) !important;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+    letter-spacing: 0.5px;
+  }
+
+  a, button {
+    color: #fff !important;
+    font-size: 0.9rem;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+
+    &:hover, &.active-link {
+      opacity: 1;
+    }
+
+    &.active-link {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
 }
 
 .content {
-  height: calc(100dvh - 64px);
+  min-height: calc(100dvh - 64px);
   overflow-y: auto;
-}
-
-.active-link {
-  background: rgba(255, 255, 255, 0.15);
 }
