@@ -1,10 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, catchError, throwError } from 'rxjs';
 import {
   LoginRequest,
   RegisterRequest,
   TokenResponse,
+  RefreshRequest,
+  LogoutRequest,
   UserResponse,
 } from '../models/user';
 import { Router } from '@angular/router';
@@ -14,6 +16,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private readonly TOKEN_KEY = 'token';
+  private readonly REFRESH_TOKEN_KEY = 'refresh_token';
   private readonly USER_KEY = 'current_user';
 
   login(data: LoginRequest): Observable<TokenResponse> {
@@ -34,21 +37,47 @@ export class AuthService {
     );
   }
 
-  logout(): void {
-    sessionStorage.removeItem(this.TOKEN_KEY);
-    sessionStorage.removeItem(this.USER_KEY);
-    this.router.navigate(['/login']);
+  refreshToken(): Observable<TokenResponse> {
+    const refresh_token = this.getRefreshToken();
+    const body: RefreshRequest = { refresh_token: refresh_token ?? '' };
+    return this.http.post<TokenResponse>('/auth/refresh', body).pipe(
+      tap((res) => this.setSession(res))
+    );
+  }
+
+  logout(): Observable<void> {
+    const refresh_token = this.getRefreshToken();
+    const body: LogoutRequest = { refresh_token: refresh_token ?? '' };
+    return this.http.post<void>('/auth/logout', body).pipe(
+      tap(() => this.clearSession()),
+      catchError((err) => {
+        this.clearSession();
+        return throwError(() => err);
+      })
+    );
   }
 
   getToken(): string | null {
     return sessionStorage.getItem(this.TOKEN_KEY);
   }
 
+  getRefreshToken(): string | null {
+    return sessionStorage.getItem(this.REFRESH_TOKEN_KEY);
+  }
+
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
 
+  clearSession(): void {
+    sessionStorage.removeItem(this.TOKEN_KEY);
+    sessionStorage.removeItem(this.REFRESH_TOKEN_KEY);
+    sessionStorage.removeItem(this.USER_KEY);
+    this.router.navigate(['/login']);
+  }
+
   private setSession(res: TokenResponse): void {
     sessionStorage.setItem(this.TOKEN_KEY, res.access_token);
+    sessionStorage.setItem(this.REFRESH_TOKEN_KEY, res.refresh_token);
   }
 }
