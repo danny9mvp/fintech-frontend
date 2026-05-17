@@ -14,7 +14,7 @@ import {
   MovementCreate,
   MovementUpdate,
 } from '../../../core/models/movement';
-import { CategoryResponse } from '../../../core/models/category';
+import { CategoryResponse, BudgetWarning } from '../../../core/models/category';
 
 @Component({
   selector: 'app-movement-form',
@@ -48,6 +48,22 @@ export class MovementForm implements OnInit {
     description: '',
   };
   loading = false;
+  budgetWarning: BudgetWarning | null = null;
+
+  get projectedUsage(): number | null {
+    if (!this.budgetWarning || !this.budgetWarning.budget || !this.data.amount) return null;
+    return ((this.budgetWarning.total_expense + this.data.amount) / this.budgetWarning.budget) * 100;
+  }
+
+  onCategoryOrTypeChange(): void {
+    this.budgetWarning = null;
+    if (this.data.type === 'EXPENSE' && this.data.movement_category_id) {
+      this.categorySvc.checkBudget(this.data.movement_category_id).subscribe({
+        next: (w) => this.budgetWarning = w,
+        error: () => this.budgetWarning = null,
+      });
+    }
+  }
 
   ngOnInit(): void {
     this.categorySvc.list().subscribe((c) => (this.categories = c));
@@ -63,12 +79,17 @@ export class MovementForm implements OnInit {
           amount: m.amount,
           description: m.description,
         };
+        this.onCategoryOrTypeChange();
       });
     }
   }
 
   submit(): void {
     if (!this.data.movement_category_id || this.data.amount <= 0) return;
+    if (this.data.type === 'EXPENSE' && this.projectedUsage != null && this.projectedUsage > 100) {
+      this.snackBar.open('Presupuesto excedido para esta categoria', 'Cerrar', { duration: 4000 });
+      return;
+    }
     this.loading = true;
 
     if (this.isEdit && this.movementId) {
