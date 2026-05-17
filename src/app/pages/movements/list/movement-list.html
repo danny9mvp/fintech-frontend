@@ -52,6 +52,7 @@
 }
 
 @if (!loading && movements.length > 0) {
+  <div class="table-wrapper">
   <table mat-table [dataSource]="movements">
     <ng-container matColumnDef="created_at">
       <th mat-header-cell *matHeaderCellDef>Fecha</th>
@@ -102,4 +103,5 @@
     [pageSizeOptions]="[5, 10, 20, 50]"
     (page)="onPage($event)"
   />
+  </div>
 }
