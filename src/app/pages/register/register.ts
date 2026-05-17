@@ -38,14 +38,12 @@ export class Register {
     second_lastname: '',
   };
   confirmPassword = '';
-  loading = false;
 
   submit(): void {
     if (this.data.password !== this.confirmPassword) {
       this.snackBar.open('Las contrasenas no coinciden', 'Cerrar', { duration: 3000 });
       return;
     }
-    this.loading = true;
     this.auth.register(this.data).subscribe({
       next: () => {
         this.auth.me().subscribe(() => {
@@ -53,7 +51,6 @@ export class Register {
         });
       },
       error: (err) => {
-        this.loading = false;
         const msg = err.error?.detail || 'Error al registrarse';
         this.snackBar.open(msg, 'Cerrar', { duration: 4000 });
       },
