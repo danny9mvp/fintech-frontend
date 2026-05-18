@@ -39,6 +39,17 @@
           }
         }
 
+        @if (!isEdit && data.type === 'EXPENSE' && availableBalance != null) {
+          <div class="balance-info">
+            Balance disponible: {{ availableBalance | number:'1.2-2' }}
+            @if (insufficientBalance) {
+              <div class="insufficient-balance">
+                No tienes suficientes fondos para este gasto
+              </div>
+            }
+          </div>
+        }
+
         <mat-form-field appearance="outline">
           <mat-label>Monto</mat-label>
           <input
@@ -70,7 +81,7 @@
             mat-raised-button
             color="primary"
             type="submit"
-            [disabled]="loading || form.invalid || (projectedUsage != null && projectedUsage > 100)"
+            [disabled]="loading || form.invalid || insufficientBalance || (projectedUsage != null && projectedUsage > 100)"
           >
             {{ loading ? 'Guardando...' : 'Guardar' }}
           </button>

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
+  BalanceResponse,
   MovementResponse,
   MovementCreate,
   MovementUpdate,
@@ -36,6 +37,10 @@ export class MovementService {
 
   update(id: number, data: MovementUpdate): Observable<MovementResponse> {
     return this.http.patch<MovementResponse>(`/movements/${id}`, data);
+  }
+
+  getBalance(): Observable<BalanceResponse> {
+    return this.http.get<BalanceResponse>('/movements/balance');
   }
 
   delete(id: number): Observable<void> {

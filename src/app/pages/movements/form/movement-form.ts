@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MovementService } from '../../../core/services/movement.service';
 import { CategoryService } from '../../../core/services/category.service';
 import {
+  BalanceResponse,
   MovementCreate,
   MovementUpdate,
 } from '../../../core/models/movement';
@@ -49,6 +50,7 @@ export class MovementForm implements OnInit {
   };
   loading = false;
   budgetWarning: BudgetWarning | null = null;
+  availableBalance: number | null = null;
 
   get projectedUsage(): number | null {
     if (!this.budgetWarning || !this.budgetWarning.budget || !this.data.amount) return null;
@@ -65,8 +67,21 @@ export class MovementForm implements OnInit {
     }
   }
 
+  get insufficientBalance(): boolean {
+    return (
+      !this.isEdit &&
+      this.data.type === 'EXPENSE' &&
+      this.availableBalance != null &&
+      this.data.amount > this.availableBalance
+    );
+  }
+
   ngOnInit(): void {
     this.categorySvc.list().subscribe((c) => (this.categories = c));
+
+    this.movementSvc.getBalance().subscribe({
+      next: (res: BalanceResponse) => (this.availableBalance = res.balance),
+    });
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -86,6 +101,10 @@ export class MovementForm implements OnInit {
 
   submit(): void {
     if (!this.data.movement_category_id || this.data.amount <= 0) return;
+    if (this.insufficientBalance) {
+      this.snackBar.open('Fondos insuficientes para crear este gasto', 'Cerrar', { duration: 4000 });
+      return;
+    }
     if (this.data.type === 'EXPENSE' && this.projectedUsage != null && this.projectedUsage > 100) {
       this.snackBar.open('Presupuesto excedido para esta categoria', 'Cerrar', { duration: 4000 });
       return;

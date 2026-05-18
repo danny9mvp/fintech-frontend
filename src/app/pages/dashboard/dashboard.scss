@@ -11,6 +11,56 @@
   }
 }
 
+.balance-hero {
+  border-radius: 16px;
+  background: linear-gradient(135deg, #546e7a 0%, #37474f 100%);
+  color: #fff;
+  margin-bottom: 24px;
+  padding: 8px 0;
+  text-align: center;
+
+  &.positive {
+    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+  }
+
+  &.negative {
+    background: linear-gradient(135deg, #b71c1c 0%, #c62828 100%);
+  }
+
+  .balance-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.85;
+    margin: 0 0 4px;
+  }
+
+  .balance-amount {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin: 4px 0;
+    font-family: 'Roboto Mono', monospace;
+    letter-spacing: -1px;
+  }
+
+  .balance-sub {
+    font-size: 0.8rem;
+    opacity: 0.75;
+    margin: 4px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
 .summary-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -29,7 +79,6 @@
 
     &:nth-child(1) { border-left-color: var(--income); }
     &:nth-child(2) { border-left-color: var(--expense); }
-    &:nth-child(3) { border-left-color: var(--smart-blue); }
 
     mat-card-header {
       mat-icon {
@@ -58,7 +107,6 @@
 
     &.income { color: var(--income); }
     &.expense { color: var(--expense); }
-    &.balance { color: var(--smart-blue); }
   }
 }
 

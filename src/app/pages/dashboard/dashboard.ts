@@ -9,6 +9,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { MovementService } from '../../core/services/movement.service';
 import { BudgetSummaryItem } from '../../core/models/category';
 import { UserResponse } from '../../core/models/user';
+import { BalanceResponse } from '../../core/models/movement';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,11 +33,16 @@ export class Dashboard implements OnInit {
   summaries: BudgetSummaryItem[] = [];
   totalIncome = 0;
   totalExpense = 0;
+  balanceFromApi = 0;
   loading = true;
 
   ngOnInit(): void {
     const stored = sessionStorage.getItem('current_user');
     if (stored) this.user = JSON.parse(stored);
+
+    this.movementSvc.getBalance().subscribe({
+      next: (res: BalanceResponse) => (this.balanceFromApi = res.balance),
+    });
 
     this.categorySvc.budgetSummary().subscribe({
       next: (items) => {
@@ -49,16 +55,12 @@ export class Dashboard implements OnInit {
     this.movementSvc.list({ page_size: 100 }).subscribe({
       next: (res) => {
         this.totalIncome = res.items
-          .filter((m) => m.type === 'INCOME')
+          .filter((m) => m.type.toUpperCase() === 'INCOME')
           .reduce((s, m) => s + m.amount, 0);
         this.totalExpense = res.items
-          .filter((m) => m.type === 'EXPENSE')
+          .filter((m) => m.type.toUpperCase() === 'EXPENSE')
           .reduce((s, m) => s + m.amount, 0);
       },
     });
-  }
-
-  get balance(): number {
-    return this.totalIncome - this.totalExpense;
   }
 }
