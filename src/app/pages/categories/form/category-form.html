@@ -22,7 +22,21 @@
             name="budget"
             [(ngModel)]="data.budget"
           />
+          @if (budgetExceedsBalance) {
+            <mat-error>El presupuesto total excederia tu balance disponible</mat-error>
+          }
         </mat-form-field>
+
+        @if (remainingBudget != null) {
+          <div class="balance-info">
+            Presupuesto disponible: {{ remainingBudget | number:'1.2-2' }}
+            @if (budgetExceedsBalance) {
+              <div class="budget-exceeded">
+                El presupuesto total de las categorias excederia tu balance
+              </div>
+            }
+          </div>
+        }
         <div class="form-actions">
           <button mat-button type="button" (click)="router.navigate(['/categories'])">
             Cancelar
@@ -31,7 +45,7 @@
             mat-raised-button
             color="primary"
             type="submit"
-            [disabled]="loading || form.invalid"
+            [disabled]="loading || form.invalid || budgetExceedsBalance"
           >
             {{ loading ? 'Guardando...' : 'Guardar' }}
           </button>
