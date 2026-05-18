@@ -2,8 +2,6 @@ services:
   fintech-frontend:
     build: .
     container_name: fintech-frontend
-    depends_on:
-      - fintech-backend
     ports:
       - "80:80"
     networks:
