@@ -6,8 +6,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { CategoryService } from '../../../core/services/category.service';
 import { CategoryResponse } from '../../../core/models/category';
+import { ConfirmDialog } from '../../../shared/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-category-list',
@@ -26,6 +28,7 @@ export class CategoryList implements OnInit {
   private categorySvc = inject(CategoryService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
   columns = ['name', 'budget', 'actions'];
   categories: CategoryResponse[] = [];
@@ -55,16 +58,20 @@ export class CategoryList implements OnInit {
   }
 
   delete(id: number): void {
-    if (!confirm('¿Eliminar esta categoria?')) return;
-    this.categorySvc.delete(id).subscribe({
-      next: () => {
-        this.snackBar.open('Categoria eliminada', 'Cerrar', { duration: 3000 });
-        this.load();
-      },
-      error: (err) => {
-        const msg = err.error?.detail || 'Error al eliminar';
-        this.snackBar.open(msg, 'Cerrar', { duration: 4000 });
-      },
+    this.dialog.open(ConfirmDialog, {
+      data: { title: 'Eliminar categoria', message: '¿Eliminar esta categoria?' },
+    }).afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.categorySvc.delete(id).subscribe({
+        next: () => {
+          this.snackBar.open('Categoria eliminada', 'Cerrar', { duration: 3000 });
+          this.load();
+        },
+        error: (err) => {
+          const msg = err.error?.detail || 'Error al eliminar';
+          this.snackBar.open(msg, 'Cerrar', { duration: 4000 });
+        },
+      });
     });
   }
 }

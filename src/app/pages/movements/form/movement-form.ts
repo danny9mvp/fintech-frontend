@@ -51,10 +51,14 @@ export class MovementForm implements OnInit {
   loading = false;
   budgetWarning: BudgetWarning | null = null;
   availableBalance: number | null = null;
+  originalAmount = 0;
 
   get projectedUsage(): number | null {
     if (!this.budgetWarning || !this.budgetWarning.budget || !this.data.amount) return null;
-    return ((this.budgetWarning.total_expense + this.data.amount) / this.budgetWarning.budget) * 100;
+    const expense = this.isEdit
+      ? this.budgetWarning.total_expense - this.originalAmount
+      : this.budgetWarning.total_expense;
+    return ((expense + Number(this.data.amount)) / Number(this.budgetWarning.budget)) * 100;
   }
 
   onCategoryOrTypeChange(): void {
@@ -72,7 +76,7 @@ export class MovementForm implements OnInit {
       !this.isEdit &&
       this.data.type === 'EXPENSE' &&
       this.availableBalance != null &&
-      this.data.amount > this.availableBalance
+      Number(this.data.amount) > this.availableBalance
     );
   }
 
@@ -88,6 +92,7 @@ export class MovementForm implements OnInit {
       this.isEdit = true;
       this.movementId = +id;
       this.movementSvc.get(+id).subscribe((m) => {
+        this.originalAmount = m.amount;
         this.data = {
           movement_category_id: m.movement_category_id,
           type: m.type,
@@ -100,7 +105,7 @@ export class MovementForm implements OnInit {
   }
 
   submit(): void {
-    if (!this.data.movement_category_id || this.data.amount <= 0) return;
+    if (!this.data.movement_category_id || Number(this.data.amount) <= 0) return;
     if (this.insufficientBalance) {
       this.snackBar.open('Fondos insuficientes para crear este gasto', 'Cerrar', { duration: 4000 });
       return;
