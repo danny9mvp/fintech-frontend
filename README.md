@@ -57,6 +57,7 @@ Construye la imagen y sirve la app via nginx en el puerto 80. Las peticiones API
 
 - **OpenCode**: asistente principal para todo el ciclo de desarrollo. Se uso para el scaffolding inicial del proyecto, aplicación de estilos en toda la aplicación, asistencia en la creación de funcionalidades como la renovación del token, corrección de bugs y refactorización de código.
 - **Claude (via OpenCode)**: modelo subyacente que ejecuto las instrucciones de OpenCode para generar codigo, depurar errores y refactorizar.
+- **Playwright**: utilizado como navegador headless controlado por el agente de IA para realizar pruebas E2E en vivo directamente sobre la aplicación corriendo en Docker. Permitió verificar flujos completos (login, navegación, CRUD, validaciones) sin intervención manual.
 
 ### Tareas asignadas a OpenCode
 
@@ -68,12 +69,15 @@ Construye la imagen y sirve la app via nginx en el puerto 80. Las peticiones API
 | Paleta de colores | Aplicacion de una paleta azul corporativa mediante CSS custom properties y tema preconstruido de Angular Material. |
 | Perfil de usuario | Creacion de la pagina de perfil con formulario de actualizacion de datos personales y cambio de contrasena. |
 | Verificacion de presupuesto | Integracion del endpoint /check-budget en el formulario de movimientos para alertar sobre uso excesivo del presupuesto. |
+| Pruebas E2E con Playwright | Automatizacion de pruebas en vivo sobre la aplicacion en Docker para verificar flujos completos (login, CRUD de categorias y movimientos, validacion de presupuesto contra balance) y detectar bugs de interfaz y logica. |
 
 ### Ejemplos concretos
 
 1. **"Arregla el dashboard que se queda congelado al cargar"** — OpenCode identifico que el metodo `budgetSummary()` del servicio `CategoryService` jamas se invocaba en el `ngOnInit` del dashboard. La correccion fue aniadir la suscripcion a `categorySvc.budgetSummary()` y manejar el estado `loading` para mostrar un progress bar mientras se completan las peticiones asincronicas.
 
 2. **"Implementa el flujo de refresh token con Bloqueo de peticiones concurrentes"** — OpenCode genero en el interceptor HTTP la logica para detectar un 401, bloquear las peticiones entrantes mediante un BehaviorSubject, renovar el token via `POST /auth/refresh`, y reemitir las peticiones encoladas. Incluyo exclusion de las rutas `/auth/refresh` y `/auth/logout` para evitar ciclos infinitos.
+
+3. **"Verifica que no se pueda crear un presupuesto que exceda el balance disponible"** — OpenCode utilizo Playwright para navegar al formulario de categorias, completar los campos con valores que exceden el balance, confirmar que el boton de guardar aparecia deshabilitado y que el mensaje de advertencia se mostraba en pantalla. Luego probo el caso limite (presupuesto igual al remanente) para verificar que si se permitia. Este ciclo de prueba en vivo permitio detectar un bug de coercion de tipos (string vs number en inputs `type="number"`) sin necesidad de escribir tests unitarios adicionales.
 
 ### Sugerencia modificada o rechazada
 
@@ -82,3 +86,5 @@ OpenCode sugirio implementar un tema personalizado de Angular Material con la fu
 ### Valoracion
 
 El uso de IA acelero significativamente el desarrollo, especialmente en la generacion de componentes repetitivos (CRUDs, formularios, tablas) y en la depuracion de errores asincronicos (dependencias circulares en servicios, estados de carga no manejados). La calidad del codigo generado fue consistente con las convenciones del proyecto porque OpenCode leia los archivos existentes antes de producir codigo nuevo, replicando el estilo y las importaciones. El principal riesgo fue la generacion de codigo que asumia librerias o endpoints inexistentes, lo cual requirio verificacion manual en cada iteracion. En general, el tiempo de desarrollo se redujo aproximadamente a la mitad comparado con escribir todo manualmente.
+
+La integracion de Playwright como navegador headless controlado por el agente de IA resulto especialmente util para detectar bugs de interfaz que no cubrian los tests unitarios, como la coercion incorrecta de tipos en inputs `type="number"` y el comportamiento de validacion en casos limite. Poder ejecutar flujos completos (login, creacion, validacion) en vivo sobre la aplicacion real permitio iterar mas rapido que con un enfoque de solo codigo.
