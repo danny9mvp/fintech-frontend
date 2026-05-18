@@ -11,10 +11,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 import { MovementService } from '../../../core/services/movement.service';
 import { CategoryService } from '../../../core/services/category.service';
 import { MovementResponse, MovementFilters } from '../../../core/models/movement';
 import { CategoryResponse } from '../../../core/models/category';
+import { ConfirmDialog } from '../../../shared/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-movement-list',
@@ -39,6 +41,7 @@ export class MovementList implements OnInit {
   private categorySvc = inject(CategoryService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
   columns = ['created_at', 'description', 'category_name', 'type', 'amount', 'actions'];
   movements: MovementResponse[] = [];
@@ -108,16 +111,20 @@ export class MovementList implements OnInit {
   }
 
   delete(id: number): void {
-    if (!confirm('¿Eliminar este movimiento?')) return;
-    this.movementSvc.delete(id).subscribe({
-      next: () => {
-        this.snackBar.open('Movimiento eliminado', 'Cerrar', { duration: 3000 });
-        this.load();
-      },
-      error: (err) => {
-        const msg = err.error?.detail || 'Error al eliminar';
-        this.snackBar.open(msg, 'Cerrar', { duration: 4000 });
-      },
+    this.dialog.open(ConfirmDialog, {
+      data: { title: 'Eliminar movimiento', message: '¿Eliminar este movimiento?' },
+    }).afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.movementSvc.delete(id).subscribe({
+        next: () => {
+          this.snackBar.open('Movimiento eliminado', 'Cerrar', { duration: 3000 });
+          this.load();
+        },
+        error: (err) => {
+          const msg = err.error?.detail || 'Error al eliminar';
+          this.snackBar.open(msg, 'Cerrar', { duration: 4000 });
+        },
+      });
     });
   }
 }
