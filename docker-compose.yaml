@@ -1,0 +1,12 @@
+services:
+  fintech-frontend:
+    build: .
+    container_name: fintech-frontend
+    ports:
+      - "80:80"
+    networks:
+      - fintech-net
+    restart: unless-stopped
+networks:
+  fintech-net:
+    name: fintech-net
