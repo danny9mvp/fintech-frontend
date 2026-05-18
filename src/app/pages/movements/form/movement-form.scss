@@ -47,3 +47,19 @@
   border-radius: 8px;
   font-size: 0.875rem;
 }
+
+.balance-info {
+  font-size: 0.875rem;
+  color: #555;
+  padding: 4px 0;
+}
+
+.insufficient-balance {
+  background: #f8d7da;
+  border: 1px solid #dc3545;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  margin-top: 8px;
+}

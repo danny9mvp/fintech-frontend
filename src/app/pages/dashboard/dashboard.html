@@ -1,6 +1,22 @@
 <div class="dashboard">
   <h2>Bienvenido{{ user?.firstname ? ', ' + user?.firstname : '' }}</h2>
 
+  <mat-card class="balance-hero" [class.positive]="balanceFromApi > 0" [class.negative]="balanceFromApi < 0">
+    <mat-card-content>
+      <p class="balance-label">Fondos disponibles</p>
+      <p class="balance-amount">{{ balanceFromApi | number:'1.2-2' }}</p>
+      <p class="balance-sub">
+        @if (balanceFromApi > 0) {
+          <mat-icon>arrow_upward</mat-icon> Positivo
+        } @else if (balanceFromApi < 0) {
+          <mat-icon>arrow_downward</mat-icon> Negativo
+        } @else {
+          <mat-icon>remove</mat-icon> Cero
+        }
+      </p>
+    </mat-card-content>
+  </mat-card>
+
   <div class="summary-cards">
     <mat-card>
       <mat-card-header>
@@ -18,15 +34,6 @@
       </mat-card-header>
       <mat-card-content>
         <p class="amount expense">{{ totalExpense | number:'1.2-2' }}</p>
-      </mat-card-content>
-    </mat-card>
-    <mat-card>
-      <mat-card-header>
-        <mat-icon mat-card-avatar>account_balance</mat-icon>
-        <mat-card-title>Balance</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p class="amount balance">{{ balance | number:'1.2-2' }}</p>
       </mat-card-content>
     </mat-card>
   </div>

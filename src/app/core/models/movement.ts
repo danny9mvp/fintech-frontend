@@ -31,6 +31,10 @@ export interface MovementFilters {
   page_size?: number;
 }
 
+export interface BalanceResponse {
+  balance: number;
+}
+
 export interface PaginatedResponse<T> {
   items: T[];
   page: number;
